@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "dnget", "dnget.csproj", "{4AD571B8-B22A-4E23-989B-DE99A8791EEF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4AD571B8-B22A-4E23-989B-DE99A8791EEF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AD571B8-B22A-4E23-989B-DE99A8791EEF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AD571B8-B22A-4E23-989B-DE99A8791EEF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AD571B8-B22A-4E23-989B-DE99A8791EEF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F0F3B9EC-58E2-4113-963B-4CB585B40C7A}
+	EndGlobalSection
+EndGlobal
