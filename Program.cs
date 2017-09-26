@@ -1,20 +1,18 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Net;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace dnget
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             DownloadTask();
             Console.ReadKey();
         }
 
-        async static Task DownloadTask()
+        private static async Task DownloadTask()
         {
             Console.WriteLine("Enter source url: ");
             string remoteUri = Console.ReadLine();
@@ -31,6 +29,7 @@ namespace dnget
             Console.WriteLine($"\"{fileName}\" Successfully downloaded to {Environment.CurrentDirectory}");
         }
     }
+
     //class DownloadGamefile
     //{
     //    private volatile bool _completed;
