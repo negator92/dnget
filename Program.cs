@@ -4,9 +4,9 @@ using System.Net;
 
 namespace dnget
 {
-    internal class Program
+    internal static class Program
     {
-        private static void Main(string[] args)
+        private static void Main()
         {
             Console.WriteLine("Enter source url: ");
             string remoteUri = Console.ReadLine();
@@ -14,8 +14,8 @@ namespace dnget
             string fileName = Console.ReadLine();
             WebClient myWebClient = new WebClient();
             Console.WriteLine($"\nDownloading File \"{fileName}\" to {Environment.CurrentDirectory}\nfrom \"{remoteUri}\"\n");
-            myWebClient.DownloadFileCompleted += new AsyncCompletedEventHandler(Completed);
-            myWebClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(ProgressChanged);
+            myWebClient.DownloadFileCompleted += Completed;
+            myWebClient.DownloadProgressChanged += ProgressChanged;
             myWebClient.DownloadFileAsync(new Uri(remoteUri), fileName);
             Console.ReadKey();
         }
@@ -31,7 +31,7 @@ namespace dnget
         {
             if (!e.Cancelled)
             {
-                Console.WriteLine($"Download task completed.");
+                Console.WriteLine($"\nDownload task completed.");
             }
         }
 
@@ -43,7 +43,7 @@ namespace dnget
             long bytes = Math.Abs(byteCount);
             int place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
             double num = Math.Round(bytes / Math.Pow(1024, place), 1);
-            return (Math.Sign(byteCount) * num).ToString() + suf[place];
+            return (Math.Sign(byteCount) * num) + suf[place];
         }
     }
 }
