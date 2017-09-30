@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace dnget
@@ -23,15 +24,23 @@ namespace dnget
             using (var client = new HttpClient()) {
                 Console.WriteLine($"\nDownloading File \"{fileName}\" to {Environment.CurrentDirectory}\nfrom \"{url}\"\n");
                 using (var fileStream = new FileStream(fileName, FileMode.Create))
-                using (var stream = await client.GetStreamAsync(url))
+                using (var response = await client.GetAsync(url))
+                using (var stream = await response.Content.ReadAsStreamAsync())
                 {
+                    var size = response.Content.Headers.ContentLength;                   
+                    
                     var buffer = new byte[BufferSize];
                     var read = 0;
                     while ((read = await stream.ReadAsync(buffer, 0, buffer.Length)) != 0)
                     {
                         await fileStream.WriteAsync(buffer, 0, read);
                         Console.Write($"\r{fileStream.Position} bytes read");
-                        if ()
+                        if (size.HasValue)
+                        {
+                            Console.Write($" of {size}");
+                        }
+                        
+                        Thread.Sleep(1000);
                     }
                 }
                 
