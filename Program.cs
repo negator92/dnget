@@ -1,37 +1,50 @@
 ﻿using System;
-using System.ComponentModel;
-using System.Net;
+using System.IO;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace dnget
 {
     internal static class Program
     {
+        private const int BufferSize = 256;
+        
         private static void Main()
         {
             Console.WriteLine("Enter source url: ");
             string remoteUri = Console.ReadLine();
             Console.WriteLine("Enter file.name: ");
             string fileName = Console.ReadLine();
-            WebClient myWebClient = new WebClient();
-            Console.WriteLine($"\nDownloading File \"{fileName}\" to {Environment.CurrentDirectory}\nfrom \"{remoteUri}\"\n");
-            myWebClient.DownloadFileCompleted += Completed;
-            myWebClient.DownloadProgressChanged += ProgressChanged;
-            myWebClient.DownloadFileAsync(new Uri(remoteUri), fileName);
-            Console.ReadKey();
+            Download(remoteUri, fileName).Wait();
         }
 
-        private static void ProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        private static async Task Download(string url, string fileName)
         {
-            Console.SetCursorPosition(0, Console.CursorTop);
-            Console.Write($"\rDownloaded {BytesToString(e.BytesReceived)}    ");
-            System.Threading.Thread.Sleep(1000);
-        }
-
-        private static void Completed(object sender, AsyncCompletedEventArgs e)
-        {
-            if (!e.Cancelled)
-            {
-                Console.WriteLine($"\nDownload task completed.");
+            using (var client = new HttpClient()) {
+                Console.WriteLine($"\nDownloading File \"{fileName}\" to {Environment.CurrentDirectory}\nfrom \"{url}\"\n");
+                using (var fileStream = new FileStream(fileName, FileMode.Create))
+                using (var response = await client.GetAsync(url))
+                using (var stream = await response.Content.ReadAsStreamAsync())
+                {
+                    var size = response.Content.Headers.ContentLength;                   
+                    
+                    var buffer = new byte[BufferSize];
+                    var read = 0;
+                    while ((read = await stream.ReadAsync(buffer, 0, buffer.Length)) != 0)
+                    {
+                        await fileStream.WriteAsync(buffer, 0, read);
+                        Console.Write($"\r{fileStream.Position} bytes read");
+                        if (size.HasValue)
+                        {
+                            Console.Write($" of {size}");
+                        }
+                        
+                        Thread.Sleep(1000);
+                    }
+                }
+                
+                Console.WriteLine($"\nDownload completed");
             }
         }
 
